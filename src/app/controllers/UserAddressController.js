@@ -30,13 +30,19 @@ class UserAdressController {
 
     const { userId } = req;
 
-    const isRegistered = await UserAddress.findOne({
+    await UserAddress.findOne({
       where: { userId },
     });
 
-    const {
-      zipcode, street, streetNumber, complement, neighborhood, city, state,
-    } = req.body;
+    // const {
+    //   zipcode,
+    //   street,
+    //   streetNumber,
+    //   complement,
+    //   neighborhood,
+    //   city,
+    //   state,
+    // } = req.body;
 
     return null;
   }

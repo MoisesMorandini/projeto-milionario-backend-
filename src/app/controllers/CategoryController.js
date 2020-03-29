@@ -22,6 +22,7 @@ class CategoryController {
     }
     const { name } = req.body;
 
+    // eslint-disable-next-line no-restricted-globals
     if (!isNaN(name)) {
       return res.status(400).json({ error: 'Validation fails' });
     }
@@ -32,7 +33,9 @@ class CategoryController {
     });
 
     if (find) {
-      return res.status(400).json({ mess: 'Repeated category is not permitted' });
+      return res
+        .status(400)
+        .json({ mess: 'Repeated category is not permitted' });
     }
 
     const category = await Category.create(req.body);

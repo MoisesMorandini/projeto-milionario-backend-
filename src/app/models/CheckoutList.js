@@ -9,14 +9,17 @@ class CheckoutList extends Model {
       },
       {
         sequelize,
-      },
+      }
     );
     return this;
   }
 
   static associate(models) {
     this.belongsTo(models.Product, { foreignKey: 'product_id', as: 'product' });
-    this.belongsTo(models.Checkout, { foreignKey: 'checkout_id', as: 'checkout' });
+    this.belongsTo(models.Checkout, {
+      foreignKey: 'checkout_id',
+      as: 'checkout',
+    });
   }
 }
 

@@ -9,7 +9,7 @@ class Checkout extends Model {
       },
       {
         sequelize,
-      },
+      }
     );
     return this;
   }

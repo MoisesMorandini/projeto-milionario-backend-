@@ -6,7 +6,12 @@ import CheckoutList from '../models/CheckoutList';
 class CheckoutController {
   async store(req, res) {
     const {
-      address, customer, installments, card_hash, items, amount: amountClient,
+      address,
+      customer,
+      installments,
+      card_hash,
+      items,
+      amount: amountClient,
     } = req.body;
 
     try {
@@ -56,7 +61,7 @@ class CheckoutController {
             country: 'br',
           },
         },
-        items: items.map((item) => ({
+        items: items.map(item => ({
           id: String(item.id),
           title: item.name,
           unit_price: parseInt(item.price * 100, 10),
@@ -73,7 +78,8 @@ class CheckoutController {
       });
       console.log(req.params.id);
       // adicionando produtos no checkout
-      const list = await items.map((item) => {
+      // eslint-disable-next-line array-callback-return
+      await items.map(item => {
         CheckoutList.create({
           product_id: item.id,
           checkout_id: checkout.id,

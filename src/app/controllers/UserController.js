@@ -22,9 +22,7 @@ class UserController {
     if (await User.findOne({ where: { email: req.body.email } })) {
       return res.status(400).json({ error: 'User already exists.' });
     }
-    const {
-      id, name, email, administrator,
-    } = await User.create(req.body);
+    const { id, name, email, administrator } = await User.create(req.body);
     return res.json({
       id,
       name,
@@ -40,17 +38,23 @@ class UserController {
       oldPassword: Yup.string().min(6),
       newPassword: Yup.string()
         .min(6)
-        .when('oldPassword', (oldPassword, field) => (oldPassword ? field.required() : field)),
-      confirmPassword: Yup.string().when('newPassword', (newPassword, field) => (newPassword ? field.required().oneOf([Yup.ref('newPassword')]) : field)),
+        .when('oldPassword', (oldPassword, field) =>
+          oldPassword ? field.required() : field
+        ),
+      confirmPassword: Yup.string().when('newPassword', (newPassword, field) =>
+        newPassword ? field.required().oneOf([Yup.ref('newPassword')]) : field
+      ),
     });
 
     if (!(await schemaYup.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
+    console.log('========================');
+    console.log(req.body);
+    console.log('========================');
 
     const { email, oldPassword } = req.body;
     const user = await User.findByPk(req.userId);
-
     if (email !== user.email) {
       const userExists = await User.findOne({
         where: { email },

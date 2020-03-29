@@ -13,13 +13,16 @@ class Transaction extends Model {
         tid: Sequelize.INTEGER,
         installments: Sequelize.INTEGER,
       },
-      { sequelize },
+      { sequelize }
     );
     return this;
   }
 
   static associate(models) {
-    this.belongsTo(models.Checkout, { foreignKey: 'checkout_id', as: 'checkout' });
+    this.belongsTo(models.Checkout, {
+      foreignKey: 'checkout_id',
+      as: 'checkout',
+    });
   }
 }
 

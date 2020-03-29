@@ -33,8 +33,8 @@ class DataBase {
 
     // this.connection = new Sequelize('postgres://szbnffpjiwqfnm:a04483d07395ab669c4fdab24a8cb83a5bd820dbcaceabe089f01d44a80ba724@ec2-3-234-169-147.compute-1.amazonaws.com:5432/d6rh5396thpsj?ssl=true');
     models
-      .map((model) => model.init(this.connection))
-      .map((model) => model.associate && model.associate(this.connection.models));
+      .map(model => model.init(this.connection))
+      .map(model => model.associate && model.associate(this.connection.models));
   }
 }
 export default new DataBase();

@@ -30,9 +30,7 @@ class ProductController {
 
     if (!category) return res.status(400).json({ error: 'Category invalid' });
 
-    const {
-      name, description, stock, price, file_id,
-    } = req.body;
+    const { name, description, stock, price, file_id } = req.body;
 
     const isRegistered = await Product.findOne({
       where: {
@@ -40,7 +38,9 @@ class ProductController {
       },
     });
     if (isRegistered) {
-      return res.status(400).json({ error: 'Repeated product is not permitted' });
+      return res
+        .status(400)
+        .json({ error: 'Repeated product is not permitted' });
     }
     const product = await Product.create({
       category_id: category.id,
@@ -104,6 +104,7 @@ class ProductController {
         },
       ],
       order: [[{ model: Category, as: 'category' }, 'name']],
+      // eslint-disable-next-line no-dupe-keys
       order: ['id'],
     });
     if (!products) return res.status(400).json({ error: 'Produtcs not find' });

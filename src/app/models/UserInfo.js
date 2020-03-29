@@ -13,7 +13,7 @@ class UserInfo extends Model {
       },
       {
         sequelize,
-      },
+      }
     );
     return this;
   }
