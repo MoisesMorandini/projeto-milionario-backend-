@@ -38,8 +38,8 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
-jspm_packages/
+node_modules
+jsm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -106,6 +106,7 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+.vscode
 
 # yarn v2
 
@@ -113,3 +114,7 @@ dist
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+
+# tmp/uploads
+tmp/uploads/*
+!tmp/uploads/.gitkeep
