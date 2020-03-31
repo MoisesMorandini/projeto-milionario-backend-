@@ -12,7 +12,6 @@ class CheckoutListController {
       return res
         .status(400)
         .json({ error: "This user doens't have a checkout" });
-
     // const checkoutList = await CheckoutList.findAll();
     const checkoutList = await Promise.all(
       checkouts.map(checkout =>

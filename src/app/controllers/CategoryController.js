@@ -3,6 +3,7 @@ import Category from '../models/Categorie';
 
 class CategoryController {
   async index(req, res) {
+    console.log('asdasdasdsad');
     const categories = await Category.findAll({
       attributes: ['id', 'name'],
     });

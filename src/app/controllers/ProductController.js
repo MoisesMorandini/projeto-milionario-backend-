@@ -107,7 +107,7 @@ class ProductController {
       // eslint-disable-next-line no-dupe-keys
       order: ['id'],
     });
-    if (!products) return res.status(400).json({ error: 'Produtcs not find' });
+    if (!products) return res.status(400).json({ error: 'Products not find' });
 
     return res.status(200).json(products);
   }
@@ -131,8 +131,10 @@ class ProductController {
         },
       ],
     });
+    console.log('========================');
+    if (!products) res.status(400).json();
 
-    if (!products) res.status(200).json();
+    if (products.length === 0) res.status(204).json();
 
     return res.status(200).json(products);
   }
