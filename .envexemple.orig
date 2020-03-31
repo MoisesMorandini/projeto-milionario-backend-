@@ -1,0 +1,22 @@
+APP_URL=
+# Auth
+APP_SECRET=
+
+# Database
+DB_URI=
+DB_HOST=
+DB_USER=
+DB_PASS=
+DB_NAME=
+
+# PAGARME
+PAGARME_API_KEY =
+<<<<<<< HEAD
+=======
+
+# AWS
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=
+BUCKET_NAME=
+>>>>>>> added upload img in aws s3
