@@ -131,7 +131,6 @@ class ProductController {
         },
       ],
     });
-    console.log('========================');
     if (!products) res.status(400).json();
 
     if (products.length === 0) res.status(204).json();
