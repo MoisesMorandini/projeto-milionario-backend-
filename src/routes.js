@@ -2,9 +2,10 @@ import { Router } from 'express';
 import multer from 'multer';
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionControllers';
-// import authMiddleware from './app/middlewares/auth';
+import authMiddleware from './app/middlewares/auth';
 import FileController from './app/controllers/FileController';
 import multerConfig from './config/multer';
+import DepartmentController from './app/controllers/DepartmentController';
 import CategoryController from './app/controllers/CategoryController';
 import CheckoutController from './app/controllers/CheckoutController';
 import CheckoutListController from './app/controllers/CheckoutListController';
@@ -24,13 +25,19 @@ routes.get('/', async (req, res) => {
 
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
-// routes.use(authMiddleware);
+routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
+routes.get('/departments', DepartmentController.index);
+routes.post('/departments', DepartmentController.store);
+routes.get('/department/:id', DepartmentController.findById);
+routes.delete('/department/:id', DepartmentController.delete);
+
 routes.get('/categories', CategoryController.index);
 routes.post('/categories', CategoryController.store);
+routes.delete('/categories/:id', CategoryController.delete);
 
 routes.get('/products', ProductController.index);
 routes.get('/product/:id', ProductController.findById);

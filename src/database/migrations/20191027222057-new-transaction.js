@@ -10,8 +10,6 @@ module.exports = {
       checkout_id: {
         type: Sequelize.INTEGER,
         references: { model: 'checkouts', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
         allowNull: false,
         unique: true,
       },
