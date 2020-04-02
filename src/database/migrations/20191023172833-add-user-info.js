@@ -13,7 +13,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
         allowNull: false,
-        unique: true,
       },
       cpf: {
         type: Sequelize.STRING(11),
