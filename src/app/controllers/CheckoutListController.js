@@ -10,7 +10,7 @@ class CheckoutListController {
     });
     if (!checkouts)
       return res
-        .status(400)
+        .status(204)
         .json({ error: "This user doens't have a checkout" });
     // const checkoutList = await CheckoutList.findAll();
     const checkoutList = await Promise.all(

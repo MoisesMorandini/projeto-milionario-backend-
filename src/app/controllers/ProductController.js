@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Sequelize } from 'sequelize';
 import Product from '../models/Product';
 import Category from '../models/Categorie';
 import File from '../models/File';
@@ -69,7 +70,7 @@ class ProductController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const product = await Product.findByPk(req.body.id);
+    const product = await Product.findByPk(req.params.id);
 
     if (!product) return res.status(400).json({ error: 'Product not found' });
 
@@ -107,15 +108,34 @@ class ProductController {
       // eslint-disable-next-line no-dupe-keys
       order: ['id'],
     });
-    if (!products) return res.status(400).json({ error: 'Products not find' });
+
+    if (!products)
+      return res.status(400).json({ error: 'Error finding for products.' });
+
+    if (products.length === 0)
+      return res.status(204).json({ error: 'Products not found' });
 
     return res.status(200).json(products);
   }
 
-  async findByCategory(req, res) {
-    const products = await Product.findAll({
+  async search(req, res) {
+    const { category, page = 1, limit = 20 } = req.query;
+    let { name } = req.query;
+    const { Op } = Sequelize;
+
+    if (name === undefined) name = '';
+
+    const { count, rows } = await Product.findAndCountAll({
+      offset: (page - 1) * limit,
+      limit,
       where: {
-        category_id: req.params.id,
+        name: { [Op.like]: `%${name}%` },
+        category_id:
+          category === undefined
+            ? {
+                [Op.ne]: 0,
+              }
+            : category,
       },
       attributes: ['id', 'name', 'description', 'stock', 'price'],
       include: [
@@ -131,11 +151,12 @@ class ProductController {
         },
       ],
     });
-    if (!products) res.status(400).json();
+    
+    res.header('X-Total-Count', count);
 
-    if (products.length === 0) res.status(204).json();
+    if (count === 0) res.status(204).json();
 
-    return res.status(200).json(products);
+    return res.status(200).json(rows);
   }
 
   async findById(req, res) {
