@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import User from '../app/models/User';
 import File from '../app/models/File';
+import Department from '../app/models/Department';
 import Categorie from '../app/models/Categorie';
 import Product from '../app/models/Product';
 import UserInfo from '../app/models/UserInfo';
@@ -14,6 +15,7 @@ import databaseConfig from '../config/database02';
 const models = [
   User,
   File,
+  Department,
   Categorie,
   Product,
   Checkout,
