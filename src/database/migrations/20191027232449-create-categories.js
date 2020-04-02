@@ -12,6 +12,13 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      department_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'departments', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        allowNull: false,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -21,6 +28,5 @@ module.exports = {
         allowNull: false,
       },
     }),
-
   down: queryInterface => queryInterface.dropTable('categories'),
 };

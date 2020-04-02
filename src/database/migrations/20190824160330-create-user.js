@@ -16,6 +16,11 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      administrator: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: true,
+      },
       password_hash: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -30,9 +35,7 @@ module.exports = {
       },
     });
   },
-
-  // eslint-disable-next-line no-unused-vars
-  down: (queryInterface, Sequelize) => {
+  down: queryInterface => {
     return queryInterface.dropTable('users');
   },
 };
