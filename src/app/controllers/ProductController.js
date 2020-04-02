@@ -80,6 +80,13 @@ class ProductController {
   }
 
   async delete(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params)))
+      return res.status(400).json({ error: 'Validation fails' });
+
     const product = await Product.findByPk(req.params.id);
 
     if (!product) return res.status(400).json({ error: 'Product not found' });
@@ -151,7 +158,7 @@ class ProductController {
         },
       ],
     });
-    
+
     res.header('X-Total-Count', count);
 
     if (count === 0) res.status(204).json();
@@ -160,6 +167,13 @@ class ProductController {
   }
 
   async findById(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.params)))
+      return res.status(400).json({ error: 'Validation fails' });
+
     const product = await Product.findByPk(req.params.id, {
       attributes: ['id', 'name', 'description', 'stock', 'price'],
       include: [

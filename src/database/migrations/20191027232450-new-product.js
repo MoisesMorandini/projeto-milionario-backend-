@@ -10,15 +10,11 @@ module.exports = {
       category_id: {
         type: Sequelize.INTEGER,
         references: { model: 'categories', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
         allowNull: false,
       },
       file_id: {
         type: Sequelize.INTEGER,
         references: { model: 'files', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
         allowNull: false,
       },
       name: {
