@@ -14,7 +14,6 @@ class SessionController {
     if (!(await schemaYup.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
-    console.log('teste1234asdasd');
     const { email, password } = req.body;
     const user = await User.findOne({
       where: { email },
@@ -43,4 +42,5 @@ class SessionController {
     });
   }
 }
+
 export default new SessionController();

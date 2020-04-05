@@ -76,7 +76,6 @@ class CheckoutController {
         amount: parseInt(amount * 100, 10),
         fee,
       });
-      console.log(req.params.id);
       // adicionando produtos no checkout
       // eslint-disable-next-line array-callback-return
       await items.map(item => {
