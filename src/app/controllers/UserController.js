@@ -3,9 +3,6 @@ import User from '../models/User';
 
 class UserController {
   async store(req, res) {
-    console.log('=====================================================');
-    console.log('        ********* POST/USERS/ *************            ');
-
     const schemaYup = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string()
@@ -49,16 +46,15 @@ class UserController {
     if (!(await schemaYup.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
-    console.log('========================');
-    console.log(req.body);
-    console.log('========================');
 
     const { email, oldPassword } = req.body;
     const user = await User.findByPk(req.userId);
+
     if (email !== user.email) {
       const userExists = await User.findOne({
         where: { email },
       });
+
       if (userExists) {
         return res.status(400).json({ error: 'User already exists.' });
       }
@@ -78,4 +74,5 @@ class UserController {
     });
   }
 }
+
 export default new UserController();
