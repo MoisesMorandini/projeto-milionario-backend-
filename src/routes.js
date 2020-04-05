@@ -10,12 +10,18 @@ import CategoryController from './app/controllers/CategoryController';
 import CheckoutController from './app/controllers/CheckoutController';
 import CheckoutListController from './app/controllers/CheckoutListController';
 import ProductController from './app/controllers/ProductController';
+import EmailController from './app/controllers/EmailController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
+
 routes.post('/sessions', SessionController.store);
+
+routes.post('/forgot_password', EmailController.forgotPassword);
+routes.post('/reset_password', EmailController.resetPassword);
+
 routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 

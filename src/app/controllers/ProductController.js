@@ -38,11 +38,13 @@ class ProductController {
         name,
       },
     });
+
     if (isRegistered) {
       return res
         .status(400)
         .json({ error: 'Repeated product is not permitted' });
     }
+
     const product = await Product.create({
       category_id: category.id,
       name,
