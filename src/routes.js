@@ -14,15 +14,6 @@ import ProductController from './app/controllers/ProductController';
 const routes = new Router();
 const upload = multer(multerConfig);
 
-routes.get('/', async (req, res) => {
-  // const user = await User.create({
-  //   name: 'moises',
-  //   email: 'moises@hotmail.com',
-  //   password_hash: '123456',
-  // });
-  return res.status(200);
-});
-
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 routes.use(authMiddleware);
