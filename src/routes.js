@@ -28,6 +28,10 @@ routes.put('/users', UserController.update);
 routes.post('/files', upload.single('file'), FileController.store);
 
 routes.get('/departments', DepartmentController.index);
+routes.get(
+  '/departments/categories',
+  DepartmentController.getDepartmentWithCategory
+);
 routes.post('/departments', DepartmentController.store);
 routes.get('/department/:id', DepartmentController.findById);
 routes.delete('/department/:id', DepartmentController.delete);

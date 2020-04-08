@@ -7,9 +7,10 @@ class EmailController {
     try {
       const { email } = req.body;
 
-      const user = await User.findOne({ where: { email: email } });
+      const user = await User.findOne({ where: { email } });
 
-      if (!user) return res.status(400).json({ error: 'User email not found.' });
+      if (!user)
+        return res.status(400).json({ error: 'User email not found.' });
 
       const token = crypto.randomBytes(3).toString('hex');
 
@@ -27,9 +28,12 @@ class EmailController {
           to: email,
           subject: 'Solicitação de troca de senha - Ecommerce',
           template: 'PasswordRecovery',
-          context: { name: user.name, link: `http://url/recoveryPassword/?token=${token}&email=${email}` },
+          context: {
+            name: user.name,
+            link: `http://url/recoveryPassword/?token=${token}&email=${email}`,
+          },
         },
-        function (error) {
+        function(error) {
           if (error) {
             return res
               .status(400)
@@ -39,32 +43,41 @@ class EmailController {
         }
       );
     } catch (error) {
-      console.log(error);
       return res
         .status(400)
         .json({ error: 'Error on trying to recover password.' });
     }
-  },
+  }
 
   async resetPassword(req, res) {
     const { email, token, password } = req.body;
 
     try {
-      const user = await User.findOne({ where: { email: email } });
+      const user = await User.findOne({ where: { email } });
 
       if (!user) return res.status(400).json({ error: 'User not found.' });
 
-      if (token !== user.password_reset_token) return res.status(400).json({ error: 'Invalid token.' });
+      if (token !== user.password_reset_token)
+        return res.status(400).json({ error: 'Invalid token.' });
 
       const now = new Date();
 
-      if (now > user.password_reset_expires) return res.status(400).json({ error: 'Token expired, generate a new one.' });
+      if (now > user.password_reset_expires)
+        return res
+          .status(400)
+          .json({ error: 'Token expired, generate a new one.' });
 
-      await user.update({ password: password, password_reset_token: null, password_reset_expires: null });
+      await user.update({
+        password,
+        password_reset_token: null,
+        password_reset_expires: null,
+      });
 
       return res.send();
     } catch (error) {
-      return res.status(400).json({ error: 'Cannot reset password, try again.' });
+      return res
+        .status(400)
+        .json({ error: 'Cannot reset password, try again.' });
     }
   }
 }
