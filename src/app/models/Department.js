@@ -12,6 +12,13 @@ class Department extends Model {
     );
     return this;
   }
+
+  static associate(models) {
+    this.hasMany(models.Categorie, {
+      foreignKey: 'department_id',
+      as: 'category',
+    });
+  }
 }
 
 export default Department;
