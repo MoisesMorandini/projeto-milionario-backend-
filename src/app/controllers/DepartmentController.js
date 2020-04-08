@@ -1,10 +1,29 @@
 import * as Yup from 'yup';
 import Department from '../models/Department';
+import Category from '../models/Categorie';
 
 class DepartmentController {
   async index(req, res) {
     const departments = await Department.findAll({
       attributes: ['id', 'name'],
+    });
+    if (!departments)
+      return res.status(400).json({ error: 'Searching department failed' });
+    if (!departments.length)
+      return res.status(204).json({ mess: 'Departments not found' });
+    return res.json(departments);
+  }
+
+  async getDepartmentWithCategory(req, res) {
+    const departments = await Department.findAll({
+      attributes: ['id', 'name'],
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['id', 'name'],
+        },
+      ],
     });
     if (!departments)
       return res.status(400).json({ error: 'Searching department failed' });
