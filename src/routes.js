@@ -22,7 +22,8 @@ routes.post('/sessions', SessionController.store);
 routes.post('/forgot_password', EmailController.forgotPassword);
 routes.post('/reset_password', EmailController.resetPassword);
 
-routes.use(authMiddleware);
+// routes.use(authMiddleware);
+
 routes.put('/users', UserController.update);
 
 routes.post('/files', upload.single('file'), FileController.store);
