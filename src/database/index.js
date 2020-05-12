@@ -9,6 +9,7 @@ import UserAddress from '../app/models/UserAddress';
 import Transaction from '../app/models/Transaction';
 import Checkout from '../app/models/Checkout';
 import CheckoutList from '../app/models/CheckoutList';
+import TechnicalSpecification from '../app/models/TechnicalSpecification';
 
 import databaseConfig from '../config/database02';
 
@@ -23,6 +24,7 @@ const models = [
   Transaction,
   UserInfo,
   UserAddress,
+  TechnicalSpecification,
 ];
 
 class DataBase {

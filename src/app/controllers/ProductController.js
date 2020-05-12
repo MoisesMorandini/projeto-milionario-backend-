@@ -3,6 +3,7 @@ import { Sequelize } from 'sequelize';
 import Product from '../models/Product';
 import Category from '../models/Categorie';
 import File from '../models/File';
+import TechnicalSpecification from '../models/TechnicalSpecification';
 
 class ProductController {
   async store(req, res) {
@@ -142,8 +143,8 @@ class ProductController {
         category_id:
           category === undefined
             ? {
-                [Op.ne]: 0,
-              }
+              [Op.ne]: 0,
+            }
             : category,
       },
       attributes: ['id', 'name', 'description', 'stock', 'price'],
@@ -188,6 +189,11 @@ class ProductController {
           model: File,
           as: 'file',
           attributes: ['name', 'path', 'url'],
+        },
+        {
+          model: TechnicalSpecification,
+          as: 'technical_specifications',
+          attributes: ['name', 'description'],
         },
       ],
     });
