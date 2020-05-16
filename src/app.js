@@ -13,7 +13,11 @@ class App {
   }
 
   middlewares() {
-    this.server.use(cors());
+    this.server.use(
+      cors({
+        exposedHeaders: 'X_Total_Count',
+      })
+    );
     this.server.use(express.json());
     this.server.use(
       '/files',
