@@ -12,7 +12,7 @@ class EmailController {
       if (!user)
         return res.status(400).json({ error: 'User email not found.' });
 
-      const token = crypto.randomBytes(3).toString('hex');
+      const token = crypto.randomBytes(12).toString('hex');
 
       const expirationTime = new Date();
 
@@ -30,10 +30,10 @@ class EmailController {
           template: 'PasswordRecovery',
           context: {
             name: user.name,
-            link: `http://url/recoveryPassword/?token=${token}&email=${email}`,
+            link: `http://localhost:3000/reset-password/?email=${email}&token=${token}`,
           },
         },
-        function(error) {
+        function (error) {
           if (error) {
             return res
               .status(400)
