@@ -17,9 +17,9 @@ class DepartmentController {
       where: {
         name: { [Op.like]: `%${name}%` },
       },
+      order: [['name', 'ASC']],
       attributes: ['id', 'name'],
     });
-
     res.header('X-Total-Count', count);
 
     if (count === 0) res.status(204).json();
