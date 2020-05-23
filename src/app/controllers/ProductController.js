@@ -143,8 +143,8 @@ class ProductController {
         category_id:
           category === undefined
             ? {
-              [Op.ne]: 0,
-            }
+                [Op.ne]: 0,
+              }
             : category,
       },
       attributes: ['id', 'name', 'description', 'stock', 'price'],
@@ -162,7 +162,7 @@ class ProductController {
       ],
     });
 
-    res.header('X-Total-Count', count);
+    res.header('X_Total_Count', count);
 
     if (count === 0) res.status(204).json();
 

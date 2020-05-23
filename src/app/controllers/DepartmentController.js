@@ -20,7 +20,7 @@ class DepartmentController {
       order: [['name', 'ASC']],
       attributes: ['id', 'name'],
     });
-    res.header('X-Total-Count', count);
+    res.header('X_Total_Count', count);
 
     if (count === 0) res.status(204).json();
 
