@@ -19,8 +19,11 @@ class UserAddress extends Model {
     return this;
   }
 
-  static associete(models) {
-    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user_id' });
+  static associate(models) {
+    this.belongsTo(models.User, {
+      foreignKey: 'user_id',
+      as: 'users',
+    });
   }
 }
 
