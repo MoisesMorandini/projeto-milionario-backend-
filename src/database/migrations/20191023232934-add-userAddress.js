@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('user_address', {
+    return queryInterface.createTable('user_addresses', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -10,10 +10,7 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         references: { model: 'users', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
         allowNull: false,
-        unique: true,
       },
       zipcode: {
         type: Sequelize.STRING(8),
@@ -25,7 +22,7 @@ module.exports = {
       },
       street_number: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       complement: {
         type: Sequelize.STRING(50),
@@ -43,15 +40,15 @@ module.exports = {
         type: Sequelize.STRING(30),
         allowNull: false,
       },
-      create_at: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      update_at: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
     });
   },
-  down: queryInterface => queryInterface.dropTable('user_address'),
+  down: queryInterface => queryInterface.dropTable('user_addresses'),
 };

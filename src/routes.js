@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import UserController from './app/controllers/UserController';
+import UserAddress from './app/controllers/UserAddressController';
 import SessionController from './app/controllers/SessionControllers';
 import authMiddleware from './app/middlewares/auth';
 import FileController from './app/controllers/FileController';
@@ -22,9 +23,13 @@ routes.post('/sessions', SessionController.store);
 routes.post('/forgot_password', EmailController.forgotPassword);
 routes.post('/reset_password', EmailController.resetPassword);
 
-// routes.use(authMiddleware);
+routes.use(authMiddleware);
 
-routes.put('/users', UserController.update);
+routes.put('/users/changePassword', UserController.changePassword);
+routes.post('/users/address', UserAddress.store);
+routes.get('/users/address', UserAddress.findByUserId);
+routes.put('/users/address/:id', UserAddress.update);
+routes.delete('/users/address/:id', UserAddress.delete);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
