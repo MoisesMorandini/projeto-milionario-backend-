@@ -4,12 +4,11 @@ class UserInfo extends Model {
   static init(sequelize) {
     super.init(
       {
+        user_id: Sequelize.STRING,
         cpf: Sequelize.STRING,
         rg: Sequelize.STRING,
-        first_ddd: Sequelize.STRING,
-        first_one: Sequelize.INTEGER,
-        segund_one: Sequelize.INTEGER,
-        second_ddd: Sequelize.STRING,
+        first_phone: Sequelize.STRING,
+        second_phone: Sequelize.STRING,
       },
       {
         sequelize,
