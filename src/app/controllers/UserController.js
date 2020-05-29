@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
+import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import UserInfo from '../models/UserInfo';
+import authConfig from '../../config/auth';
 
 class UserController {
   async store(req, res) {
@@ -8,23 +11,53 @@ class UserController {
       email: Yup.string()
         .email()
         .required(),
+      cpf: Yup.string()
+        .required()
+        .min(11)
+        .max(11),
+      rg: Yup.string().required(),
       password: Yup.string()
         .required()
         .min(6),
+      first_phone: Yup.string()
+        .required()
+        .min(8),
     });
+
     if (!(await schemaYup.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
     if (await User.findOne({ where: { email: req.body.email } })) {
-      return res.status(400).json({ error: 'User already exists.' });
+      return res.status(400).json({ error: 'User e-mail already exists.' });
     }
+
+    if (await UserInfo.findOne({ where: { cpf: req.body.cpf } })) {
+      return res.status(400).json({ error: 'User CPF already exists.' });
+    }
+
     const { id, name, email, administrator } = await User.create(req.body);
+
+    const { cpf, rg, first_phone, second_phone } = req.body;
+
+    await UserInfo.create({
+      user_id: id,
+      cpf,
+      rg,
+      first_phone,
+      second_phone,
+    });
+
     return res.json({
-      id,
-      name,
-      email,
-      administrator,
+      user: {
+        id,
+        name,
+        email,
+        administrator,
+      },
+      token: jwt.sign({ id }, authConfig.secret, {
+        expiresIn: authConfig.expiresIn,
+      }),
     });
   }
 

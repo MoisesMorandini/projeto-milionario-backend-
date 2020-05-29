@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('user_info', {
+    return queryInterface.createTable('user_infos', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -17,26 +17,19 @@ module.exports = {
       cpf: {
         type: Sequelize.STRING(11),
         allowNull: false,
+        unique: true,
       },
       rg: {
         type: Sequelize.STRING(12),
         allowNull: false,
       },
-      first_ddd: {
-        type: Sequelize.STRING(2),
-        allowNull: false,
-      },
       first_phone: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      second_ddd: {
-        type: Sequelize.STRING(2),
+        type: Sequelize.STRING(15),
         allowNull: false,
       },
       second_phone: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.STRING(15),
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -50,6 +43,6 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('user_info');
+    return queryInterface.dropTable('user_infos');
   },
 };
