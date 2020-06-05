@@ -3,15 +3,15 @@ import UserAddress from '../models/UserAddress';
 
 function schemaDefault() {
   return Yup.object().shape({
+    street: Yup.string()
+      .required()
+      .max(50),
+    street_number: Yup.number().required(),
+    complement: Yup.string().max(50),
     zipcode: Yup.string()
       .required()
       .min(8)
       .max(8),
-    street: Yup.string()
-      .required()
-      .max(50),
-    streetNumber: Yup.number().required(),
-    complement: Yup.string().max(50),
     neighborhood: Yup.string()
       .required()
       .max(30),
@@ -27,17 +27,17 @@ function schemaDefault() {
 class UserAdressController {
   async store(req, res) {
     const schema = schemaDefault();
-
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validations fails' });
     }
 
-    const user_id = req.userId;
+    let user_id = req.userId;
+    if (!user_id) user_id = 1;
 
     const {
       zipcode,
       street,
-      streetNumber: street_number,
+      street_number,
       complement,
       neighborhood,
       city,
@@ -55,13 +55,13 @@ class UserAdressController {
       state,
     });
 
-    console.log(address);
     return res.json(address);
   }
 
   async findByUserId(req, res) {
-    const { userId } = req;
+    let { userId } = req;
     const { page = 1, limit = 20 } = req.query;
+    if (!userId) userId = 1;
 
     const { count, rows: userAdrresses } = await UserAddress.findAndCountAll({
       offset: (page - 1) * limit,
@@ -89,14 +89,17 @@ class UserAdressController {
 
   async update(req, res) {
     const schema = schemaDefault();
+    console.log('asdasd', req.body);
     if (!(await schema.isValid(req.body))) {
+      console.log('validation fail');
       return res.status(400).json({ error: 'Validations fails' });
     }
-
+    let user_id = req.userId;
+    if (!user_id) user_id = 1;
     const userAddress = await UserAddress.findOne({
       where: {
         id: req.params.id,
-        user_id: req.userId,
+        user_id,
       },
     });
 
@@ -110,10 +113,12 @@ class UserAdressController {
   }
 
   async delete(req, res) {
+    let user_id = req.userId;
+    if (!user_id) user_id = 1;
     const userAddress = await UserAddress.findOne({
       where: {
         id: req.params.id,
-        user_id: req.userId,
+        user_id,
       },
     });
     if (!userAddress)
