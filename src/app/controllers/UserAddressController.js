@@ -89,9 +89,7 @@ class UserAdressController {
 
   async update(req, res) {
     const schema = schemaDefault();
-    console.log('asdasd', req.body);
     if (!(await schema.isValid(req.body))) {
-      console.log('validation fail');
       return res.status(400).json({ error: 'Validations fails' });
     }
     let user_id = req.userId;
@@ -103,8 +101,6 @@ class UserAdressController {
       },
     });
 
-    console.log('userid', req.userId);
-    console.log('user', userAddress);
     if (!userAddress)
       return res.status(400).json({ error: 'Address not found' });
 
