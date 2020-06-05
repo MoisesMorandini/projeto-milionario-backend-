@@ -12,6 +12,7 @@ import CheckoutListController from './app/controllers/CheckoutListController';
 import ProductController from './app/controllers/ProductController';
 import EmailController from './app/controllers/EmailController';
 import BannerController from './app/controllers/BannerController';
+import LogoController from './app/controllers/LogoController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -44,6 +45,13 @@ routes.get('/banner/:id', BannerController.findById);
 routes.post('/banner', BannerController.store);
 routes.put('/banner/:id', BannerController.update);
 routes.delete('/banner/:id', BannerController.delete);
+
+routes.get('/logo', LogoController.index);
+routes.get('/logo/main', LogoController.findMain);
+routes.get('/logo/:id', LogoController.findById);
+routes.post('/logo', LogoController.store);
+routes.put('/logo/:id', LogoController.update);
+routes.delete('/logo/:id', LogoController.delete);
 
 routes.get('/categories', CategoryController.index);
 routes.post('/categories', CategoryController.store);
