@@ -11,6 +11,7 @@ import Checkout from '../app/models/Checkout';
 import CheckoutList from '../app/models/CheckoutList';
 import TechnicalSpecification from '../app/models/TechnicalSpecification';
 import Banner from '../app/models/Banner';
+import Logo from '../app/models/Logo';
 
 import databaseConfig from '../config/database02';
 
@@ -27,6 +28,7 @@ const models = [
   UserAddress,
   TechnicalSpecification,
   Banner,
+  Logo,
 ];
 
 class DataBase {
