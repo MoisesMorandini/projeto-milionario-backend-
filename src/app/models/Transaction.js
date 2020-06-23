@@ -5,13 +5,8 @@ class Transaction extends Model {
     super.init(
       {
         checkout_id: Sequelize.INTEGER,
-        transaction_id: Sequelize.INTEGER,
         status: Sequelize.STRING,
-        authorization_code: Sequelize.STRING,
-        brand: Sequelize.STRING,
-        authorized_amount: Sequelize.INTEGER,
-        tid: Sequelize.INTEGER,
-        installments: Sequelize.INTEGER,
+        email: Sequelize.STRING,
       },
       { sequelize }
     );

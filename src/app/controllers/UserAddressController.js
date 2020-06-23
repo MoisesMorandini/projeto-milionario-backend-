@@ -31,8 +31,7 @@ class UserAdressController {
       return res.status(400).json({ error: 'Validations fails' });
     }
 
-    let user_id = req.userId;
-    if (!user_id) user_id = 1;
+    const user_id = req.userId;
 
     const {
       zipcode,
