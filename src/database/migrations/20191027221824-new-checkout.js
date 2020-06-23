@@ -2,16 +2,21 @@ module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable('checkouts', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
       },
-      amount: {
+      user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        references: { model: 'users', key: 'id' },
       },
-      fee: {
+      user_address_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'user_addresses', key: 'id' },
+        allowNull: false,
+        unique: true,
+      },
+      amount: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },

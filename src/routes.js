@@ -8,12 +8,11 @@ import FileController from './app/controllers/FileController';
 import multerConfig from './config/multer';
 import DepartmentController from './app/controllers/DepartmentController';
 import CategoryController from './app/controllers/CategoryController';
-import CheckoutController from './app/controllers/CheckoutController';
-import CheckoutListController from './app/controllers/CheckoutListController';
 import ProductController from './app/controllers/ProductController';
 import EmailController from './app/controllers/EmailController';
 import BannerController from './app/controllers/BannerController';
 import LogoController from './app/controllers/LogoController';
+import PaymentController from './app/controllers/PaymentController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -71,10 +70,7 @@ routes.post('/products', ProductController.store);
 routes.put('/product/:id', ProductController.update);
 routes.delete('/product/:id', ProductController.delete);
 
-routes.post('/checkouts/:id', CheckoutController.store);
-
-routes.get('/checkouts/', CheckoutListController.index);
-routes.get('/checkout/:id', CheckoutController.show);
-routes.get('/checkouts/user/:id', CheckoutListController.findByUser);
+routes.post('/users/buy', PaymentController.buy);
+routes.post('/users/success', PaymentController.success);
 
 export default routes;

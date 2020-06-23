@@ -8,37 +8,17 @@ module.exports = {
         primaryKey: true,
       },
       checkout_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references: { model: 'checkouts', key: 'id' },
         allowNull: false,
         unique: true,
-      },
-      transaction_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
       },
       status: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      authorization_code: {
+      email: {
         type: Sequelize.STRING,
-        allowNull: false,
-      },
-      brand: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      authorized_amount: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      tid: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      installments: {
-        type: Sequelize.INTEGER,
         allowNull: false,
       },
       created_at: {

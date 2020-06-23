@@ -7,17 +7,13 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-        references: { model: 'users', key: 'id' },
-      },
       product_id: {
         type: Sequelize.INTEGER,
         references: { model: 'products', key: 'id' },
         allowNull: false,
       },
       checkout_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references: { model: 'checkouts', key: 'id' },
         allowNull: false,
       },
