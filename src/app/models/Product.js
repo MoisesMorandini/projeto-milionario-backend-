@@ -21,10 +21,14 @@ class Product extends Model {
       foreignKey: 'category_id',
       as: 'category',
     });
-    this.belongsTo(models.File, { foreignKey: 'file_id', as: 'file' });
     this.hasMany(models.TechnicalSpecification, {
       foreignKey: 'product_id',
       as: 'technical_specifications',
+    });
+
+    this.hasMany(models.FileProduct, {
+      foreignKey: 'product_id',
+      as: 'file_products',
     });
   }
 }

@@ -9,6 +9,7 @@ class CategoryController {
       include: [
         { model: Department, as: 'department', attributes: ['id', 'name'] },
       ],
+      order: [['name', 'ASC']],
     });
     if (!categories)
       return res.status(400).json({ error: 'Searching Categories failed' });
@@ -30,6 +31,7 @@ class CategoryController {
       return res.status(400).json({ error: 'Validation fails' });
 
     const { name, department_id } = req.body;
+    console.log(req.body);
 
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(name))
@@ -56,6 +58,28 @@ class CategoryController {
     return res.json(category);
   }
 
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string()
+        .required()
+        .max(50),
+      department_id: Yup.number().required(),
+    });
+
+    const schemaIsInvalid = !(await schema.isValid(req.body));
+    if (schemaIsInvalid) res.status(400).json({ error: 'Validation fails' });
+
+    const categories = await Category.findByPk(req.params.id);
+
+    if (!categories) res.status(400).json({ error: 'Category not found' });
+
+    const categoriesUpdated = await categories.update(req.body);
+
+    res
+      .status(200)
+      .json({ mess: 'Category has been updated', data: categoriesUpdated });
+  }
+
   async delete(req, res) {
     const schema = Yup.object().shape({
       id: Yup.number().required(),
@@ -74,6 +98,24 @@ class CategoryController {
       return res.status(400).json({ err: 'Failed to delete category' });
     });
     return res.json({ mess: 'Category has been deleted' });
+  }
+
+  async findById(req, res) {
+    const { id } = req.params;
+    const category = await Category.findByPk(id, {
+      attributes: ['id', 'name'],
+      include: [
+        {
+          model: Department,
+          as: 'department',
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+
+    if (!category) res.status(400).json({ error: 'Searching category failed' });
+
+    res.status(200).json(category);
   }
 }
 

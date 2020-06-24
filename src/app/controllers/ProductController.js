@@ -1,9 +1,16 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable prefer-const */
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-plusplus */
 import * as Yup from 'yup';
 import { Sequelize } from 'sequelize';
 import Product from '../models/Product';
 import Category from '../models/Categorie';
-import File from '../models/File';
 import TechnicalSpecification from '../models/TechnicalSpecification';
+import File from '../models/File';
+import FileProduct from '../models/FileProduct';
 
 class ProductController {
   async store(req, res) {
@@ -14,10 +21,9 @@ class ProductController {
         .max(50),
       description: Yup.string()
         .required()
-        .max(50),
+        .max(250),
       stock: Yup.number().required(),
       price: Yup.number().required(),
-      file_id: Yup.number().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -32,9 +38,10 @@ class ProductController {
 
     if (!category) return res.status(400).json({ error: 'Category invalid' });
 
-    const { name, description, stock, price, file_id } = req.body;
+    const { name, description, stock, price } = req.body;
 
     const isRegistered = await Product.findOne({
+      attributes: ['name'],
       where: {
         name,
       },
@@ -46,16 +53,59 @@ class ProductController {
         .json({ error: 'Repeated product is not permitted' });
     }
 
+    if(!req.body.technical_specifications_name || !req.body.technical_specifications_description ){
+      return res.status(400).json({error: 'Invalid specifications technical, please insert!'});
+    }
+
+    let files = [];
+
+    for (let i = 0; i < req.files.length; i++) {
+      files.push(
+        await File.create({
+          name: req.files[i].originalname,
+          size: req.files[i].size,
+          path: req.files[i].key,
+          url: req.files[i].location,
+        })
+      )
+    }
+
+    if (files.length === 0)
+    return res.status(400).json({error: 'Invalid image, please insert image!'});
+
     const product = await Product.create({
       category_id: category.id,
       name,
       description,
       stock,
       price,
-      file_id,
     });
 
-    return res.status(200).json(product);
+    for (let i = 0; i < files.length; i++) {
+      await FileProduct.create({
+        file_id: files[i].id,
+        product_id: product.id,
+      });
+    }
+
+    let technical_specifications = [];
+
+    for (let i = 0; i < req.body.technical_specifications_name.length; i++) {
+      technical_specifications.push(
+        await TechnicalSpecification.create({
+          name: req.body.technical_specifications_name[i],
+          description: req.body.technical_specifications_description[i],
+          product_id: product.id,
+        })
+      )
+    }
+
+    let result = {
+      product,
+      files,
+      technical_specifications
+    }
+    return res.status(201).json(result);
   }
 
   async update(req, res) {
@@ -63,10 +113,9 @@ class ProductController {
       id: Yup.number(),
       category_id: Yup.number(),
       name: Yup.string().max(50),
-      description: Yup.string().max(50),
+      description: Yup.string().max(250),
       stock: Yup.number(),
       price: Yup.number(),
-      file_id: Yup.number(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -76,10 +125,11 @@ class ProductController {
     const product = await Product.findByPk(req.params.id);
 
     if (!product) return res.status(400).json({ error: 'Product not found' });
-
     const prod = await product.update(req.body);
 
+
     return res.status(200).json(prod);
+
   }
 
   async delete(req, res) {
@@ -109,14 +159,23 @@ class ProductController {
           attributes: ['id'],
         },
         {
-          model: File,
-          as: 'file',
-          attributes: ['name', 'path', 'url'],
+          model: TechnicalSpecification,
+          as: 'technical_specifications',
+          attributes: ['name', 'description'],
         },
-      ],
-      order: [[{ model: Category, as: 'category' }, 'name']],
-      // eslint-disable-next-line no-dupe-keys
-      order: ['id'],
+        {
+          model:  FileProduct,
+          as: 'file_products',
+          attributes: ['product_id'],
+          include: [
+            {
+              model: File,
+              as: 'file',
+              attributes:['id','name', 'path', 'url']
+            }
+          ]
+        }
+      ]
     });
 
     if (!products)
@@ -155,9 +214,16 @@ class ProductController {
           attributes: ['id'],
         },
         {
-          model: File,
-          as: 'file',
-          attributes: ['name', 'path', 'url'],
+          model:  FileProduct,
+          as: 'file_products',
+          attributes: ['product_id'],
+          include: [
+            {
+              model: File,
+              as: 'file',
+              attributes:['id','name', 'path', 'url']
+            }
+          ]
         },
       ],
     });
@@ -186,15 +252,22 @@ class ProductController {
           attributes: ['id'],
         },
         {
-          model: File,
-          as: 'file',
-          attributes: ['name', 'path', 'url'],
-        },
-        {
           model: TechnicalSpecification,
           as: 'technical_specifications',
           attributes: ['name', 'description'],
         },
+        {
+          model:  FileProduct,
+          as: 'file_products',
+          attributes: ['product_id'],
+          include: [
+            {
+              model: File,
+              as: 'file',
+              attributes:['id','name', 'path', 'url']
+            }
+          ]
+        }
       ],
     });
     if (!product) {
@@ -204,11 +277,12 @@ class ProductController {
   }
 
   async getStock(req, res) {
-    const { stock } = await Product.findByPk(req.params.id, {
+    const  stock  = await Product.findByPk(req.params.id, {
       attributes: ['stock'],
     });
+
     if (!stock) {
-      return res.status(400).json({ error: 'Falha ao receber produto' });
+      return res.status(400).json({ error: 'Product not found' });
     }
     return res.status(200).json(stock);
   }

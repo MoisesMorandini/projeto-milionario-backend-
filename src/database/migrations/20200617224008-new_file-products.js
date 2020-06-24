@@ -1,32 +1,25 @@
 module.exports = {
   up: (queryInterface, Sequelize) =>
-    queryInterface.createTable('products', {
+    queryInterface.createTable('file_products', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      category_id: {
+      file_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'categories', key: 'id' },
+        references: { model: 'files', key: 'id' },
         allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      description: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-      },
-      stock: {
+      product_id: {
         type: Sequelize.INTEGER,
+        references: { model: 'products', key: 'id' },
         allowNull: false,
-      },
-      price: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       created_at: {
         type: Sequelize.DATE,
@@ -38,5 +31,5 @@ module.exports = {
       },
     }),
 
-  down: queryInterface => queryInterface.dropTable('products'),
+  down: queryInterface => queryInterface.dropTable('file_products'),
 };

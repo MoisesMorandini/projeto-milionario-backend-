@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import User from '../app/models/User';
 import File from '../app/models/File';
+import FileProduct from '../app/models/FileProduct';
 import Department from '../app/models/Department';
 import Categorie from '../app/models/Categorie';
 import Product from '../app/models/Product';
@@ -10,14 +11,18 @@ import Transaction from '../app/models/Transaction';
 import Checkout from '../app/models/Checkout';
 import CheckoutList from '../app/models/CheckoutList';
 import TechnicalSpecification from '../app/models/TechnicalSpecification';
+<<<<<<< HEAD
 import Banner from '../app/models/Banner';
 import Logo from '../app/models/Logo';
 
+=======
+>>>>>>> CRUD Category and CRUD products
 import databaseConfig from '../config/database02';
 
 const models = [
   User,
   File,
+  FileProduct,
   Department,
   Categorie,
   Product,
