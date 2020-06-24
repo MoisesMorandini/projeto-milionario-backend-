@@ -36,6 +36,7 @@ routes.put('/users/:id/account', UserController.update);
 routes.get('/users/:id/account', UserController.show);
 
 routes.post('/files', upload.single('file'), FileController.store);
+// routes.post('/files', upload.single('file'), FileController.store);
 
 routes.get('/department', DepartmentController.index);
 routes.get(
@@ -61,7 +62,9 @@ routes.put('/logo/:id', LogoController.update);
 routes.delete('/logo/:id', LogoController.delete);
 
 routes.get('/categories', CategoryController.index);
+routes.get('/categories/:id', CategoryController.findById);
 routes.post('/categories', CategoryController.store);
+routes.put('/categories/:id', CategoryController.update);
 routes.delete('/categories/:id', CategoryController.delete);
 
 routes.get('/products', ProductController.index);
@@ -69,7 +72,7 @@ routes.get('/product/:id', ProductController.findById);
 routes.get('/products/search', ProductController.search);
 routes.get('/product/stock/:id', ProductController.getStock);
 
-routes.post('/products', ProductController.store);
+routes.post('/products', upload.array('file'), ProductController.store);
 routes.put('/product/:id', ProductController.update);
 routes.delete('/product/:id', ProductController.delete);
 
