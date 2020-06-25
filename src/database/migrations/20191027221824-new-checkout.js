@@ -14,7 +14,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'user_addresses', key: 'id' },
         allowNull: false,
-        unique: true,
       },
       amount: {
         type: Sequelize.INTEGER,

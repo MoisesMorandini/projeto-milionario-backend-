@@ -68,6 +68,7 @@ class PaymentController {
     if (!userAddress)
       return res.status(400).json({ error: 'User Address not found' });
     paypal.configure(paypalConfig);
+
     await paypal.payment.create(jsonRequest, (err, payment) => {
       if (err) {
         return res.status(400).json({ error: 'Failed checkout' });
@@ -109,6 +110,7 @@ class PaymentController {
   async success(req, res) {
     const { PayerID, paymentId } = req.query;
     const { total } = req.body;
+
     const execute_payment_json = `{
       "payer_id": "${PayerID}",
       "transactions": [{

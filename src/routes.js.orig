@@ -1,0 +1,76 @@
+import { Router } from 'express';
+import multer from 'multer';
+import UserController from './app/controllers/UserController';
+import UserAddress from './app/controllers/UserAddressController';
+import SessionController from './app/controllers/SessionControllers';
+import authMiddleware from './app/middlewares/auth';
+import FileController from './app/controllers/FileController';
+import multerConfig from './config/multer';
+import DepartmentController from './app/controllers/DepartmentController';
+import CategoryController from './app/controllers/CategoryController';
+import ProductController from './app/controllers/ProductController';
+import EmailController from './app/controllers/EmailController';
+import BannerController from './app/controllers/BannerController';
+import LogoController from './app/controllers/LogoController';
+import PaymentController from './app/controllers/PaymentController';
+
+const routes = new Router();
+const upload = multer(multerConfig);
+
+routes.post('/users', UserController.store);
+
+routes.post('/sessions', SessionController.store);
+
+routes.post('/forgot_password', EmailController.forgotPassword);
+routes.post('/reset_password', EmailController.resetPassword);
+
+routes.use(authMiddleware);
+
+routes.put('/users/changePassword', UserController.changePassword);
+routes.post('/users/address', UserAddress.store);
+routes.get('/users/address', UserAddress.findByUserId);
+routes.put('/users/address/:id', UserAddress.update);
+routes.delete('/users/address/:id', UserAddress.delete);
+
+routes.post('/files', upload.single('file'), FileController.store);
+
+routes.get('/department', DepartmentController.index);
+routes.get(
+  '/department/category',
+  DepartmentController.getDepartmentWithCategory
+);
+routes.post('/department', DepartmentController.store);
+routes.get('/department/:id', DepartmentController.findById);
+routes.put('/department/:id', DepartmentController.update);
+routes.delete('/department/:id', DepartmentController.delete);
+
+routes.get('/banner', BannerController.index);
+routes.get('/banner/:id', BannerController.findById);
+routes.post('/banner', BannerController.store);
+routes.put('/banner/:id', BannerController.update);
+routes.delete('/banner/:id', BannerController.delete);
+
+routes.get('/logo', LogoController.index);
+routes.get('/logo/main', LogoController.findMain);
+routes.get('/logo/:id', LogoController.findById);
+routes.post('/logo', LogoController.store);
+routes.put('/logo/:id', LogoController.update);
+routes.delete('/logo/:id', LogoController.delete);
+
+routes.get('/categories', CategoryController.index);
+routes.post('/categories', CategoryController.store);
+routes.delete('/categories/:id', CategoryController.delete);
+
+routes.get('/products', ProductController.index);
+routes.get('/product/:id', ProductController.findById);
+routes.get('/products/search', ProductController.search);
+routes.get('/product/stock/:id', ProductController.getStock);
+
+routes.post('/products', ProductController.store);
+routes.put('/product/:id', ProductController.update);
+routes.delete('/product/:id', ProductController.delete);
+
+routes.post('/users/buy', PaymentController.buy);
+routes.post('/users/success', PaymentController.success);
+
+export default routes;
