@@ -31,6 +31,9 @@ routes.get('/users/address', UserAddress.findByUserId);
 routes.put('/users/address/:id', UserAddress.update);
 routes.delete('/users/address/:id', UserAddress.delete);
 
+routes.put('/users/:id/account', UserController.update);
+routes.get('/users/:id/account', UserController.show);
+
 routes.post('/files', upload.single('file'), FileController.store);
 
 routes.get('/department', DepartmentController.index);
