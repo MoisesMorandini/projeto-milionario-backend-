@@ -24,7 +24,7 @@ routes.post('/sessions', SessionController.store);
 routes.post('/forgot_password', EmailController.forgotPassword);
 routes.post('/reset_password', EmailController.resetPassword);
 
-routes.use(authMiddleware);
+// routes.use(authMiddleware);
 
 routes.put('/users/changePassword', UserController.changePassword);
 routes.post('/users/address', UserAddress.store);
@@ -37,9 +37,10 @@ routes.put('/users/:id/account', UserController.update);
 routes.get('/users/:id/account', UserController.show);
 
 routes.post('/files', upload.single('file'), FileController.store);
-=======
 // routes.post('/files', upload.single('file'), FileController.store);
->>>>>>> CRUD Category and CRUD products
+=======
+routes.post('/files', upload.single('file'), FileController.store);
+>>>>>>> Crud complete
 
 routes.get('/department', DepartmentController.index);
 routes.get(
@@ -75,7 +76,7 @@ routes.get('/product/:id', ProductController.findById);
 routes.get('/products/search', ProductController.search);
 routes.get('/product/stock/:id', ProductController.getStock);
 
-routes.post('/products', upload.array('file'), ProductController.store);
+routes.post('/products', ProductController.store);
 routes.put('/product/:id', ProductController.update);
 routes.delete('/product/:id', ProductController.delete);
 
