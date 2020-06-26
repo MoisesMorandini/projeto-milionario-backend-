@@ -24,7 +24,7 @@ routes.post('/sessions', SessionController.store);
 routes.post('/forgot_password', EmailController.forgotPassword);
 routes.post('/reset_password', EmailController.resetPassword);
 
-routes.use(authMiddleware);
+// routes.use(authMiddleware);
 
 routes.put('/users/changePassword', UserController.changePassword);
 routes.post('/users/address', UserAddress.store);
@@ -72,7 +72,7 @@ routes.get('/product/:id', ProductController.findById);
 routes.get('/products/search', ProductController.search);
 routes.get('/product/stock/:id', ProductController.getStock);
 
-routes.post('/products', upload.array('file'), ProductController.store);
+routes.post('/products', ProductController.store);
 routes.put('/product/:id', ProductController.update);
 routes.delete('/product/:id', ProductController.delete);
 

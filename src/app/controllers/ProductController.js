@@ -23,9 +23,9 @@ class ProductController {
         .required()
         .max(250),
       stock: Yup.number().required(),
-      price: Yup.number().required(),
+      price: Yup.number().required()
     });
-
+    console.log('body', req.body)
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
@@ -53,25 +53,6 @@ class ProductController {
         .json({ error: 'Repeated product is not permitted' });
     }
 
-    if(!req.body.technical_specifications_name || !req.body.technical_specifications_description ){
-      return res.status(400).json({error: 'Invalid specifications technical, please insert!'});
-    }
-
-    let files = [];
-
-    for (let i = 0; i < req.files.length; i++) {
-      files.push(
-        await File.create({
-          name: req.files[i].originalname,
-          size: req.files[i].size,
-          path: req.files[i].key,
-          url: req.files[i].location,
-        })
-      )
-    }
-
-    if (files.length === 0)
-    return res.status(400).json({error: 'Invalid image, please insert image!'});
 
     const product = await Product.create({
       category_id: category.id,
@@ -81,6 +62,13 @@ class ProductController {
       price,
     });
 
+    const {files_id} = req.body;
+    const files = [];
+    for (let i = 0; i < files_id.length; i++) {
+      const file = await File.findByPk(files_id[i]);
+      if (!file) return res.status(400).json({ error: 'File invalid' });
+      files.push(file);
+    };
     for (let i = 0; i < files.length; i++) {
       await FileProduct.create({
         file_id: files[i].id,
@@ -88,17 +76,17 @@ class ProductController {
       });
     }
 
-    let technical_specifications = [];
-
-    for (let i = 0; i < req.body.technical_specifications_name.length; i++) {
-      technical_specifications.push(
+    let specifications = [];
+    const {technical_specifications} = req.body
+    technical_specifications.forEach(async specification=>{
+      specifications.push(
         await TechnicalSpecification.create({
-          name: req.body.technical_specifications_name[i],
-          description: req.body.technical_specifications_description[i],
+          name: specification.name,
+          description: specification.description,
           product_id: product.id,
         })
       )
-    }
+    });
 
     let result = {
       product,
@@ -156,7 +144,7 @@ class ProductController {
         {
           model: Category,
           as: 'category',
-          attributes: ['id'],
+          attributes: ['id','name'],
         },
         {
           model: TechnicalSpecification,
