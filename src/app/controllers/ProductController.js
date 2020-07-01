@@ -25,7 +25,6 @@ class ProductController {
       stock: Yup.number().required(),
       price: Yup.number().required()
     });
-    console.log('body', req.body)
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
@@ -110,13 +109,87 @@ class ProductController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const product = await Product.findByPk(req.params.id);
+    const product = await Product.findByPk(req.params.id, {
+      attributes: ['id', 'name', 'description', 'stock', 'price'],
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['id','name'],
+        },
+        {
+          model: TechnicalSpecification,
+          as: 'technical_specifications',
+          attributes: ['name', 'description'],
+        },
+        {
+          model:  FileProduct,
+          as: 'file_products',
+          attributes: ['product_id', 'file_id'],
+          include: [
+            {
+              model: File,
+              as: 'file',
+              attributes:['id','name', 'path', 'url']
+            }
+          ]
+        }
+      ]
+    });
 
     if (!product) return res.status(400).json({ error: 'Product not found' });
-    const prod = await product.update(req.body);
 
+    const {files_id} = req.body;
+    const files = [];
+    for (let i = 0; i < files_id.length; i++) {
+      const file = await File.findByPk(files_id[i]);
+      if (!file) return res.status(400).json({ error: 'File invalid' });
+      files.push(file);
+    };
 
-    return res.status(200).json(prod);
+    files.forEach(async file=>{
+      let existFile = !!product.file_products;
+      if(existFile){
+        existFile = product.file_products.find(productFile=>productFile.file_id === file.id)
+      }
+      if(!existFile){
+        await FileProduct.create({
+          file_id: file.id,
+          product_id: product.id,
+        });
+      }
+
+    })
+
+    let specifications = [];
+    const {technical_specifications} = req.body
+    const especifications = await TechnicalSpecification.findAll({
+      where:{
+        product_id: product.id
+      }
+    })
+    technical_specifications.forEach(async bodySpecifications=>{
+      const alredyExists = especifications.find(esp=>{
+        if(esp.name.length && esp.description.length){
+          return esp.name===bodySpecifications.name
+        }
+      })
+      if(!alredyExists){
+        const specification = await TechnicalSpecification.create({
+          product_id: product.id,
+          name: bodySpecifications.name,
+          description: bodySpecifications.description
+        })
+        specifications.push(specification)
+      }else{
+        specifications.push(alredyExists);
+      }
+    });
+
+   const prod = await product.update(req.body);
+
+    return res.json();
+    // return res.status(200).json(prod);
 
   }
 
@@ -135,6 +208,28 @@ class ProductController {
     product.destroy();
 
     return res.json({ message: 'This product has been deleted' });
+  }
+
+  async deleteTechnicalSpecification(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+      name: Yup.string().required(),
+    });
+    if (!(await schema.isValid(req.params)))
+      return res.status(400).json({ error: 'Validation fails' });
+
+    const technicalSpecification = await  TechnicalSpecification.findOne({
+      where:{
+        product_id: req.params.id,
+        name: req.params.name
+      }
+    });
+
+    if (!technicalSpecification) return res.status(400).json({ error: 'Technical Specification not found' });
+
+    technicalSpecification.destroy();
+
+    return res.json({ message: 'This Technical Specification has been deleted' });
   }
 
   async index(req, res) {

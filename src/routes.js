@@ -75,6 +75,10 @@ routes.get('/product/stock/:id', ProductController.getStock);
 routes.post('/products', ProductController.store);
 routes.put('/product/:id', ProductController.update);
 routes.delete('/product/:id', ProductController.delete);
+routes.delete(
+  '/product/specification/:id/:name',
+  ProductController.deleteTechnicalSpecification
+);
 
 routes.post('/users/buy', PaymentController.buy);
 routes.post('/users/success', PaymentController.success);
