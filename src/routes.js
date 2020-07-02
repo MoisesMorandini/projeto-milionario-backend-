@@ -24,7 +24,7 @@ routes.post('/sessions', SessionController.store);
 routes.post('/forgot_password', EmailController.forgotPassword);
 routes.post('/reset_password', EmailController.resetPassword);
 
-// routes.use(authMiddleware);
+routes.use(authMiddleware);
 
 routes.put('/users/changePassword', UserController.changePassword);
 routes.post('/users/address', UserAddress.store);
@@ -36,7 +36,7 @@ routes.put('/users/:id/account', UserController.update);
 routes.get('/users/:id/account', UserController.show);
 
 routes.post('/files', upload.single('file'), FileController.store);
-// routes.post('/files', upload.single('file'), FileController.store);
+routes.delete('/files/:id', FileController.delete);
 
 routes.get('/department', DepartmentController.index);
 routes.get(
