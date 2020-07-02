@@ -87,7 +87,10 @@ class LogoController {
     }
 
     const logoWhereStatusMain = await Logo.findOne({ where: { status: '1' } });
-    logoWhereStatusMain.update({ status: '0' });
+
+    if (logoWhereStatusMain) {
+      logoWhereStatusMain.update({ status: '0' });
+    }
 
     const { name, file_id } = req.body;
 
