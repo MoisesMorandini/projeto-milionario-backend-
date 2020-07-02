@@ -32,7 +32,6 @@ class UserAdressController {
     }
 
     const user_id = req.userId;
-
     const {
       zipcode,
       street,

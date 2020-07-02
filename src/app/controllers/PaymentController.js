@@ -14,6 +14,7 @@ class PaymentController {
     for (let i = 0; i < cart.length; i++) {
       // eslint-disable-next-line no-await-in-loop
       const prod = await Product.findByPk(cart[i].id);
+
       if (!prod) return res.status(400).json({ error: 'Product not found' });
       products.push({
         id: prod.id,
@@ -23,7 +24,6 @@ class PaymentController {
         amount: cart[i].amount,
       });
     }
-
     const produtsJson = [];
     let totalPrice = 0;
     products.forEach(product => {

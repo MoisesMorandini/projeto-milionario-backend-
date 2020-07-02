@@ -31,7 +31,6 @@ class CategoryController {
       return res.status(400).json({ error: 'Validation fails' });
 
     const { name, department_id } = req.body;
-    console.log(req.body);
 
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(name))
