@@ -139,12 +139,12 @@ class ProductController {
       offset: (page - 1) * limit,
       limit,
       where: {
-        name: { [Op.like]: `%${name}%` },
+        name: { [Op.iLike]: `%${name}%` },
         category_id:
           category === undefined
             ? {
-                [Op.ne]: 0,
-              }
+              [Op.ne]: 0,
+            }
             : category,
       },
       attributes: ['id', 'name', 'description', 'stock', 'price'],
@@ -164,7 +164,7 @@ class ProductController {
 
     res.header('X_Total_Count', count);
 
-    if (count === 0) res.status(204).json();
+    if (count === 0) return res.status(204).json();
 
     return res.status(200).json(rows);
   }

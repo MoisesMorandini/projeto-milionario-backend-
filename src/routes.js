@@ -13,6 +13,8 @@ import EmailController from './app/controllers/EmailController';
 import BannerController from './app/controllers/BannerController';
 import LogoController from './app/controllers/LogoController';
 import PaymentController from './app/controllers/PaymentController';
+import CheckoutListController from './app/controllers/CheckoutListController';
+import TransactionController from './app/controllers/TransactionController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -24,7 +26,7 @@ routes.post('/sessions', SessionController.store);
 routes.post('/forgot_password', EmailController.forgotPassword);
 routes.post('/reset_password', EmailController.resetPassword);
 
-routes.use(authMiddleware);
+// routes.use(authMiddleware);
 
 routes.put('/users/changePassword', UserController.changePassword);
 routes.post('/users/address', UserAddress.store);
@@ -75,5 +77,9 @@ routes.delete('/product/:id', ProductController.delete);
 
 routes.post('/users/buy', PaymentController.buy);
 routes.post('/users/success', PaymentController.success);
+
+routes.get('/checkout_list', CheckoutListController.index);
+
+routes.get('/transactions', TransactionController.index);
 
 export default routes;
