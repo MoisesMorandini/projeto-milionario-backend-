@@ -1,11 +1,10 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
-import * as Yup from 'yup';
-import { Sequelize } from 'sequelize';
 import CheckoutList from '../models/CheckoutList';
 import Checkout from '../models/Checkout';
-import Product from '../models/Product';
+import FileProduct from '../models/FileProduct';
 import File from '../models/File';
+import Product from '../models/Product';
 
 class CheckoutListController {
   async index(req, res) {
@@ -31,7 +30,20 @@ class CheckoutListController {
             model: Product,
             as: 'product',
             attributes: ['id', 'name', 'price'],
-            include: [{ model: File, as: 'file', attributes: ['url'] }],
+            include: [
+              {
+                model: FileProduct,
+                as: 'file_products',
+                attributes: ['product_id', 'file_id'],
+                include: [
+                  {
+                    model: File,
+                    as: 'file',
+                    attributes: ['id', 'name', 'path', 'url'],
+                  },
+                ],
+              },
+            ],
           },
         ],
       });

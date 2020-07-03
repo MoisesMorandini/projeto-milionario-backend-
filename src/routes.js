@@ -26,9 +26,33 @@ routes.post('/sessions', SessionController.store);
 routes.post('/forgot_password', EmailController.forgotPassword);
 routes.post('/reset_password', EmailController.resetPassword);
 
-// routes.use(authMiddleware);
-
 routes.put('/users/changePassword', UserController.changePassword);
+
+routes.get('/department', DepartmentController.index);
+routes.get(
+  '/department/category',
+  DepartmentController.getDepartmentWithCategory
+);
+routes.get('/department/:id', DepartmentController.findById);
+
+routes.get('/banner', BannerController.index);
+routes.get('/banner/:id', BannerController.findById);
+
+routes.get('/logo', LogoController.index);
+routes.get('/logo/main', LogoController.findMain);
+routes.get('/logo/:id', LogoController.findById);
+
+routes.get('/categories', CategoryController.index);
+routes.get('/categories/:id', CategoryController.findById);
+
+routes.get('/products', ProductController.index);
+routes.get('/product/:id', ProductController.findById);
+routes.get('/products/search', ProductController.search);
+routes.get('/product/stock/:id', ProductController.getStock);
+
+// AQUIIIIIIIIIIIIIIIIIII
+routes.use(authMiddleware); // AQUIIII
+
 routes.post('/users/address', UserAddress.store);
 routes.get('/users/address', UserAddress.findByUserId);
 routes.put('/users/address/:id', UserAddress.update);
@@ -40,39 +64,21 @@ routes.get('/users/:id/account', UserController.show);
 routes.post('/files', upload.single('file'), FileController.store);
 routes.delete('/files/:id', FileController.delete);
 
-routes.get('/department', DepartmentController.index);
-routes.get(
-  '/department/category',
-  DepartmentController.getDepartmentWithCategory
-);
 routes.post('/department', DepartmentController.store);
-routes.get('/department/:id', DepartmentController.findById);
 routes.put('/department/:id', DepartmentController.update);
 routes.delete('/department/:id', DepartmentController.delete);
 
-routes.get('/banner', BannerController.index);
-routes.get('/banner/:id', BannerController.findById);
 routes.post('/banner', BannerController.store);
 routes.put('/banner/:id', BannerController.update);
 routes.delete('/banner/:id', BannerController.delete);
 
-routes.get('/logo', LogoController.index);
-routes.get('/logo/main', LogoController.findMain);
-routes.get('/logo/:id', LogoController.findById);
 routes.post('/logo', LogoController.store);
 routes.put('/logo/:id', LogoController.update);
 routes.delete('/logo/:id', LogoController.delete);
 
-routes.get('/categories', CategoryController.index);
-routes.get('/categories/:id', CategoryController.findById);
 routes.post('/categories', CategoryController.store);
 routes.put('/categories/:id', CategoryController.update);
 routes.delete('/categories/:id', CategoryController.delete);
-
-routes.get('/products', ProductController.index);
-routes.get('/product/:id', ProductController.findById);
-routes.get('/products/search', ProductController.search);
-routes.get('/product/stock/:id', ProductController.getStock);
 
 routes.post('/products', ProductController.store);
 routes.put('/product/:id', ProductController.update);
@@ -86,7 +92,6 @@ routes.post('/users/buy', PaymentController.buy);
 routes.post('/users/success', PaymentController.success);
 
 routes.get('/checkout_list', CheckoutListController.index);
-
 routes.get('/transactions', TransactionController.index);
 
 export default routes;

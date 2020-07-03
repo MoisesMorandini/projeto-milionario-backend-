@@ -99,18 +99,18 @@ class UserController {
   }
 
   async update(req, res) {
-    const schemaYup = Yup.object().notRequired({
+    const schemaYup = Yup.object().shape({
       name: Yup.string().notRequired(),
       email: Yup.string()
         .email()
-        .notRequired(),
+        .required(),
       cpf: Yup.string()
-        .notRequired()
+        .required()
         .min(11)
         .max(11),
       rg: Yup.string().required(),
       first_phone: Yup.string()
-        .notRequired()
+        .required()
         .min(8),
       second_phone: Yup.string()
         .notRequired()

@@ -1,5 +1,5 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
-import * as Yup from 'yup';
 import { Sequelize } from 'sequelize';
 import Transaction from '../models/Transaction';
 // import Product from '../models/Product';
@@ -8,6 +8,7 @@ import Checkout from '../models/Checkout';
 import CheckoutList from '../models/CheckoutList';
 import Product from '../models/Product';
 import File from '../models/File';
+import FileProduct from '../models/FileProduct';
 
 class TransactionController {
   async index(req, res) {
@@ -21,7 +22,7 @@ class TransactionController {
       offset: (page - 1) * limit,
       limit,
       where: {
-        status: { [Op.iLike]: `%aprovado%` }, // todo: trocar para approved
+        status: { [Op.iLike]: `%approved%` },
       },
       include: [
         {
@@ -46,7 +47,20 @@ class TransactionController {
             model: Product,
             as: 'product',
             attributes: ['id', 'name', 'price'],
-            include: [{ model: File, as: 'file', attributes: ['url'] }],
+            include: [
+              {
+                model: FileProduct,
+                as: 'file_products',
+                attributes: ['product_id', 'file_id'],
+                include: [
+                  {
+                    model: File,
+                    as: 'file',
+                    attributes: ['id', 'name', 'path', 'url'],
+                  },
+                ],
+              },
+            ],
           },
         ],
       });
