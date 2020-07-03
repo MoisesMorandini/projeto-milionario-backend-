@@ -31,7 +31,7 @@ routes.post('/users/address', UserAddress.store);
 routes.get('/users/address', UserAddress.findByUserId);
 routes.put('/users/address/:id', UserAddress.update);
 routes.delete('/users/address/:id', UserAddress.delete);
-
+routes.get('/user/orders', UserController.getOrders);
 routes.put('/users/:id/account', UserController.update);
 routes.get('/users/:id/account', UserController.show);
 
