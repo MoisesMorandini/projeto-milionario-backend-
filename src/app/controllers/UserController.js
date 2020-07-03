@@ -141,7 +141,9 @@ class UserController {
 
     if (!user) return res.status(400).json({ err: 'User not found' });
 
-    const userInfo = await UserInfo.findByPk(id);
+    const userInfo = await UserInfo.findOne({
+      where: { user_id: user.id },
+    });
 
     const userAccountData = {
       name: user.name,
