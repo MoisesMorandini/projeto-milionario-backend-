@@ -1,8 +1,16 @@
+/* eslint-disable no-await-in-loop */
 import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
+import { Sequelize } from 'sequelize';
 import User from '../models/User';
 import UserInfo from '../models/UserInfo';
 import authConfig from '../../config/auth';
+import CheckoutList from '../models/CheckoutList';
+import Checkout from '../models/Checkout';
+import File from '../models/File';
+import FileProduct from '../models/FileProduct';
+import Product from '../models/Product';
+import Transaction from '../models/Transaction';
 
 class UserController {
   async store(req, res) {
@@ -145,6 +153,74 @@ class UserController {
     };
 
     return res.status(200).json(userAccountData);
+  }
+
+  async getOrders(req, res) {
+    const { userId } = req;
+
+    const { page = 1, limit = 10 } = req.query;
+    let { name } = req.query;
+    const { Op } = Sequelize;
+
+    if (name === undefined) name = '';
+
+    const transactions = await Transaction.findAll({
+      offset: (page - 1) * limit,
+      limit,
+      where: {
+        status: { [Op.iLike]: `%approved%` },
+      },
+      include: [
+        {
+          model: Checkout,
+          as: 'checkout',
+          where: {
+            user_id: userId,
+          },
+        },
+      ],
+      order: [['created_at', 'DESC']],
+    });
+
+    if (!transactions) return res.status(204).json();
+
+    const checkouts = [];
+
+    for (let i = 0; i < transactions.length; i += 1) {
+      const id = transactions[i].checkout_id;
+
+      const checkoutList = await CheckoutList.findAll({
+        where: { checkout_id: id },
+        include: [
+          {
+            model: Product,
+            as: 'product',
+            attributes: ['id', 'name', 'price'],
+            include: [
+              {
+                model: FileProduct,
+                as: 'file_products',
+                attributes: ['product_id'],
+                include: [
+                  {
+                    model: File,
+                    as: 'file',
+                    attributes: ['id', 'name', 'path', 'url'],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+
+      checkouts.push({
+        transaction: transactions[i],
+        checkoutList,
+      });
+    }
+
+    return res.status(200).json(checkouts);
   }
 }
 
